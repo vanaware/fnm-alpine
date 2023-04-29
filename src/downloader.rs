@@ -37,7 +37,7 @@ pub enum Error {
 #[cfg(unix)]
 fn filename_for_version(version: &Version, arch: &Arch) -> String {
     format!(
-        "node-{node_ver}-{platform}-{arch}.tar.xz",
+        "node-{node_ver}-{platform}-{arch}-musl.tar.xz",
         node_ver = &version,
         platform = crate::system_info::platform_name(),
         arch = arch,
@@ -170,7 +170,7 @@ mod tests {
     fn install_in(path: &Path) -> PathBuf {
         let version = Version::parse("12.0.0").unwrap();
         let arch = Arch::X64;
-        let node_dist_mirror = Url::parse("https://nodejs.org/dist/").unwrap();
+        let node_dist_mirror = Url::parse("https://unofficial-builds.nodejs.org/download/release/").unwrap();
         install_node_dist(&version, &node_dist_mirror, path, &arch).expect("Can't install Node 12");
 
         let mut location_path = path.join(version.v_str()).join("installation");

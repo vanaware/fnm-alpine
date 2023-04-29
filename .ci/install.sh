@@ -59,7 +59,12 @@ set_filename() {
         FILENAME="fnm-arm64"
         ;;
       *)
-        FILENAME="fnm-linux"
+        ID=$(awk -F= '$1=="ID" { print $2 ;}' /etc/os-release)
+        if [ "$ID" = "alpine" ]; then
+          FILENAME="fnm-alpine"
+        else
+          FILENAME="fnm-linux"
+        fi
     esac
   elif [ "$OS" = "Darwin" ] && [ "$FORCE_INSTALL" = "true" ]; then
     FILENAME="fnm-macos"
@@ -72,7 +77,7 @@ set_filename() {
     echo "Downloading fnm using Homebrew..."
   else
     echo "OS $OS is not supported."
-    echo "If you think that's a bug - please file an issue to https://github.com/Schniz/fnm/issues"
+    echo "If you think that's a bug - please file an issue to https://github.com/vanaware/fnm-alpine/issues"
     exit 1
   fi
 }
@@ -82,9 +87,9 @@ download_fnm() {
     brew install fnm
   else
     if [ "$RELEASE" = "latest" ]; then
-      URL="https://github.com/Schniz/fnm/releases/latest/download/$FILENAME.zip"
+      URL="https://github.com/vanaware/fnm-alpine/releases/latest/download/$FILENAME.zip"
     else
-      URL="https://github.com/Schniz/fnm/releases/download/$RELEASE/$FILENAME.zip"
+      URL="https://github.com/vanaware/fnm-alpine/releases/download/$RELEASE/$FILENAME.zip"
     fi
 
     DOWNLOAD_DIR=$(mktemp -d)

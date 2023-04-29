@@ -10,6 +10,7 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 jobs:
 
   create_pull_request:
+    if: github.repository == 'Schniz/fnm'
     runs-on: ubuntu-latest
     steps:
     # set up

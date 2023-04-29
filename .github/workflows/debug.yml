@@ -9,6 +9,7 @@ concurrency:
 
 jobs:
   e2e_windows_debug:
+    if: github.repository == 'Schniz/fnm'
     runs-on: windows-latest
     name: "e2e/windows/debug"
     steps:

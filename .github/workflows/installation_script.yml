@@ -11,6 +11,7 @@ on:
 
 jobs:
   test_against_latest_release_arm:
+    if: github.repository == 'Schniz/fnm'
     strategy:
       matrix:
         docker_image:
@@ -49,6 +50,7 @@ jobs:
           '
 
   test_against_latest_release:
+    if: github.repository == 'Schniz/fnm'
     name: Test against latest release
     strategy:
       matrix:
