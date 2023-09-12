@@ -1,0 +1,28 @@
+name: Release Alpine
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+jobs:
+  build_static_linux_binary:
+    if: github.repository == 'vanaware/fnm-alpine'
+    uses: ./.github/workflows/alpine_build.yml
+  release_binary:
+    needs: [build_static_linux_binary]
+    name: "Release binary"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: fnm-alpine
+          path: target/release
+      - name: mark binary as executable
+        run: chmod +x target/release/fnm
+      - name: Zip Folder
+        run: zip fnm-alpine.zip -j target/release/fnm
+      - name: Upload binaries to release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: fnm-alpine.zip

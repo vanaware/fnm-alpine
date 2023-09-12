@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Redirect to Script</title>
+        <meta http-equiv="refresh" content="0; URL='./install.sh'"/>
+    </head>
+    <body>
+        <p>
+            Redirecting to script: 
+            <a href="install.sh">install.sh</a>
+        </p>
+        <script>
+            window.location = window.location.href.split('/').slice(0,-1).concat('install.sh').join('/')
+        </script>
+    </body>
+</html>

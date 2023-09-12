@@ -59,7 +59,12 @@ set_filename() {
         FILENAME="fnm-arm64"
         ;;
       *)
-        FILENAME="fnm-linux"
+        ID=$(awk -F= '$1=="ID" { print $2 ;}' /etc/os-release)
+        if [ "$ID" = "alpine" ]; then
+          FILENAME="fnm-alpine"
+        else
+          FILENAME="fnm-linux"
+        fi
     esac
   elif [ "$OS" = "Darwin" ] && [ "$FORCE_INSTALL" = "true" ]; then
     FILENAME="fnm-macos"
@@ -72,7 +77,7 @@ set_filename() {
     echo "Downloading fnm using Homebrew..."
   else
     echo "OS $OS is not supported."
-    echo "If you think that's a bug - please file an issue to https://github.com/Schniz/fnm/issues"
+    echo "If you think that's a bug - please file an issue to https://github.com/vanaware/fnm-alpine/issues"
     exit 1
   fi
 }
@@ -82,9 +87,9 @@ download_fnm() {
     brew install fnm
   else
     if [ "$RELEASE" = "latest" ]; then
-      URL="https://github.com/Schniz/fnm/releases/latest/download/$FILENAME.zip"
+      URL="https://github.com/vanaware/fnm-alpine/releases/latest/download/$FILENAME.zip"
     else
-      URL="https://github.com/Schniz/fnm/releases/download/$RELEASE/$FILENAME.zip"
+      URL="https://github.com/vanaware/fnm-alpine/releases/download/$RELEASE/$FILENAME.zip"
     fi
 
     DOWNLOAD_DIR=$(mktemp -d)
@@ -183,7 +188,19 @@ setup_shell() {
     echo '# fnm' >>$CONF_FILE
     echo 'set PATH "'"$INSTALL_DIR"'" $PATH' >>$CONF_FILE
     echo 'fnm env | source' >>$CONF_FILE
+  elif [ "$CURRENT_SHELL" = "ash" ]; then
+    CONF_FILE=$HOME/.ashrc
+    ensure_containing_dir_exists "$CONF_FILE"
+    echo "Installing for Ash. Appending the following to $CONF_FILE:"
+    echo ""
+    echo '  # fnm'
+    echo '  export PATH="'"$INSTALL_DIR"':$PATH"'
+    echo '  eval "`fnm env`"'
 
+    echo '' >>$CONF_FILE
+    echo '# fnm' >>$CONF_FILE
+    echo 'export PATH="'$INSTALL_DIR':$PATH"' >>$CONF_FILE
+    echo 'eval "`fnm env`"' >>$CONF_FILE
   elif [ "$CURRENT_SHELL" = "bash" ]; then
     if [ "$OS" = "Darwin" ]; then
       CONF_FILE=$HOME/.profile
