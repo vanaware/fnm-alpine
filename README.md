@@ -22,9 +22,18 @@
 
 ## Installation
 
+### Alpine Node dependencies
+
+For better experience first install these packages into alpine.    
+
+```sh
+apk add libstdc++ libgcc curl unzip
+export SHELL="/bin/ash"
+```
+
 ### Using a script (macOS/Linux)
 
-For `bash`, `zsh` and `fish` shells, there's an [automatic installation script](./.ci/install.sh).
+For `ash`, `bash`, `zsh` and `fish` shells, there's an [automatic installation script](./.ci/install.sh).
 
 First ensure that `curl` and `unzip` are already installed on you operating system. Then execute:
 

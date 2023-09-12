@@ -15,6 +15,8 @@ case $1 in
       echo "$HOME/.bashrc"
     fi
     ;;
+  "ash")
+    echo "$HOME/.ashrc"
   *)
     exit 1
     ;;
